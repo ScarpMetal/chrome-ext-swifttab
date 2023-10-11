@@ -16,7 +16,6 @@ function getImageString(url: string) {
   }
 
   // chrome-extension://<id>/_favicon/?pageUrl=https://example.com&size=24
-  // Uncomment the code below when it's time to upgrade to extension manifest v3
   return `-webkit-image-set(
     url('chrome-extension://${
       chrome.runtime.id
@@ -25,12 +24,6 @@ function getImageString(url: string) {
       chrome.runtime.id
     }/_favicon/?pageUrl=${encodeURIComponent(url)}&size=32') 2x
   )`;
-
-  // favicon URL scheme for Chrome manifest v2
-  // return `-webkit-image-set(
-  //     url('chrome://favicon/size/16@1x/${url}') 1x,
-  //     url('chrome://favicon/size/16@2x/${url}') 2x
-  //   )`;
 }
 
 function BookmarksView(props: {

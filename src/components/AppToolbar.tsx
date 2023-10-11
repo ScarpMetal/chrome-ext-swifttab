@@ -14,7 +14,7 @@ function AppToolbar(props: {
     <div className="app-toolbar">
       <div className="app-title">SwiftTab</div>
 
-      <div>
+      <div className="search-container">
         <input
           autoComplete="off"
           autoFocus
