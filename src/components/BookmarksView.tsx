@@ -36,31 +36,68 @@ function BookmarksView(props: {
     <div className="bookmarks-view" onScroll={handleScrollChange}>
       <Masonry className="bookmarks" options={masonryOptions}>
         {bookmarks.map(folder => (
-          <div className="tile" key={folder.id}>
-            <div className="card">
-              <div className="card-title">{folder.title}</div>
-              <ul className="bookmark-list">
-                {folder.children
-                  ?.filter(bookmark => bookmark.url)
-                  .map(bookmark => (
-                    <li key={bookmark.id}>
-                      <a
-                        href={bookmark.url}
-                        title={bookmark.title}
-                        style={{
-                          backgroundImage: getImageString(bookmark.url!),
-                        }}
-                      >
-                        {bookmark.title}
-                      </a>
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          </div>
+          <RenderFolder key={folder.id} folder={folder} />
         ))}
       </Masonry>
     </div>
+  );
+}
+
+function RenderFolder({
+  folder,
+  nestedLevel = 0,
+}: {
+  folder: chrome.bookmarks.BookmarkTreeNode;
+  nestedLevel?: number;
+}) {
+  return (
+    <div className={nestedLevel > 0 ? 'nested-tile' : 'tile'}>
+      <div className="card">
+        <div className="card-title">{folder.title}</div>
+        <RenderFolderChildren
+          folderChildren={folder.children}
+          nestedLevel={nestedLevel}
+        />
+      </div>
+    </div>
+  );
+}
+
+function RenderFolderChildren({
+  folderChildren,
+  nestedLevel,
+}: {
+  folderChildren?: chrome.bookmarks.BookmarkTreeNode[];
+  nestedLevel: number;
+}) {
+  if (!folderChildren) return null;
+
+  const bookmarks = folderChildren.filter(bookmark => !!bookmark.url);
+  const folders = folderChildren.filter(bookmark => !!bookmark.children);
+
+  return (
+    <ul className="bookmark-list">
+      {bookmarks.map(bookmark => (
+        <li key={bookmark.id}>
+          <a
+            href={bookmark.url}
+            title={bookmark.title}
+            style={{
+              backgroundImage: getImageString(bookmark.url!),
+            }}
+          >
+            {bookmark.title}
+          </a>
+        </li>
+      ))}
+      {folders.map(folder => (
+        <RenderFolder
+          key={folder.id}
+          folder={folder}
+          nestedLevel={nestedLevel + 1}
+        />
+      ))}
+    </ul>
   );
 }
 

@@ -82,21 +82,39 @@ function MainView({ folderName = '_Swift' }: { folderName?: string }) {
     bookmarks: chrome.bookmarks.BookmarkTreeNode[],
     filter: string,
   ) => {
+    function withChildren(
+      bookmark: chrome.bookmarks.BookmarkTreeNode,
+    ): chrome.bookmarks.BookmarkTreeNode | undefined {
+      if (bookmark.url) {
+        if (!filter || bookmark.title.toLowerCase().includes(filter)) {
+          return bookmark;
+        }
+        return undefined;
+      }
+      if (bookmark.children) {
+        const filteredChildren = bookmark.children
+          .map(bookmark => {
+            return withChildren(bookmark);
+          })
+          .filter(Boolean);
+        if (!filteredChildren.length) return undefined;
+        return {
+          ...bookmark,
+          children: filteredChildren,
+        } as chrome.bookmarks.BookmarkTreeNode;
+      }
+      return undefined;
+    }
+
     // Clone bookmarks
     bookmarks = JSON.parse(JSON.stringify(bookmarks));
 
-    // Filter bookmarks
     const bookmarksFiltered = bookmarks
-      .map(folder => {
-        folder.children &&
-          (folder.children = folder.children.filter(bookmark =>
-            filter
-              ? bookmark.url && bookmark.title.toLowerCase().includes(filter)
-              : bookmark.url,
-          ));
-        return folder;
-      })
-      .filter(folder => folder.children && folder.children.length);
+      .map(bookmark => withChildren(bookmark))
+      .filter((bookmark): bookmark is chrome.bookmarks.BookmarkTreeNode =>
+        Boolean(bookmark),
+      )
+      .filter(bookmark => bookmark.children);
 
     return bookmarksFiltered;
   };
