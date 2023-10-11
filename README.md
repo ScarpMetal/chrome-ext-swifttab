@@ -7,7 +7,7 @@ Chrome extension that enables a personal new tab page featuring links from your 
 [![Chrome Web Store Rating](https://img.shields.io/chrome-web-store/rating/poikmgendcdljfoaelblkdjehmpedjif.svg?style=flat-square)](https://chrome.google.com/webstore/detail/swifttab/poikmgendcdljfoaelblkdjehmpedjif)
 [![Chrome Web Store Rating Count](https://img.shields.io/chrome-web-store/rating-count/poikmgendcdljfoaelblkdjehmpedjif.svg?style=flat-square)](https://chrome.google.com/webstore/detail/swifttab/poikmgendcdljfoaelblkdjehmpedjif/reviews) [![License](https://img.shields.io/github/license/joshbuchea/chrome-ext-swifttab.svg?style=flat-square)](LICENSE) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
-**[Available on the Chrome Web Store](https://chrome.google.com/webstore/detail/swifttab/poikmgendcdljfoaelblkdjehmpedjif)**
+**[Available on the Chrome Web Store](https://chrome.google.com/webstore/detail/swifttab/poikmgendcdljfoaelblkdjehmpedjif) (outdated)**
 
 ## Screenshot
 
