@@ -1,23 +1,26 @@
 {
   "name": "chrome-ext-swifttab",
   "description": "Chrome extension that enables a personal new tab page featuring your bookmarks",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "dependencies": {
     "onchange": "^7.1.0",
-    "prop-types": "^15.7.2",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
-    "react-masonry-component": "^6.2.1"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-masonry-component": "^6.3.0"
   },
-  "devDependencies": {
-    "react-scripts": "3.4.0"
+  "overrides": {
+    "react-masonry-component": {
+      "react": "^0.14.0 || ^15.0.0-0 || ^16.0.0-0 || ^17.0.0 || ^18.0.0"
+    }
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "watch": "onchange -i -k -v 'src/**/*' 'public/**/*' -- yarn build"
+    "clean": "rm -rf node_modules build",
+    "start": "vite",
+    "build": "vite build",
+    "build:watch": "vite build --watch",
+    "preview": "vite preview",
+    "lint": "eslint . --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "npm run lint -- --fix"
   },
   "browserslist": {
     "production": [
@@ -30,5 +33,24 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.246",
+    "@types/react": "^18.2.25",
+    "@types/react-dom": "^18.2.11",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "@vitejs/plugin-react": "^4.1.0",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-html": "^7.1.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "prettier": "^3.0.3",
+    "sass": "^1.66.1",
+    "vite": "^4.4.11",
+    "vite-tsconfig-paths": "^4.2.1"
   }
 }

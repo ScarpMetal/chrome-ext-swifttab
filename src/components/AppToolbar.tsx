@@ -1,24 +1,25 @@
-import React from 'react';
+import { FormEventHandler } from 'react';
 import ToolbarIconButton from './ToolbarIconButton';
 
 const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
 
-function AppToolbar(props) {
+function AppToolbar(props: {
+  shadow?: boolean;
+  handleSearchChange: FormEventHandler<HTMLInputElement>;
+  searchValue: string;
+}) {
   const { handleSearchChange, searchValue } = props;
-  const bookmarksButtonLabel =
-    window.navigator.userAgent.indexOf('Edg') > -1 ? 'Favorites' : 'Bookmarks';
 
   return (
     <div className="app-toolbar">
-      <div class="app-title">SwiftTab</div>
+      <div className="app-title">SwiftTab</div>
 
       <div>
         <input
-          autocomplete="off"
-          autofocus="autofocus"
+          autoComplete="off"
+          autoFocus
           onInput={handleSearchChange}
           placeholder="Search"
-          // style={{ backgroundColor: "#2850A7", color: "#fff" }}
           type="search"
           value={searchValue}
         />
@@ -32,11 +33,6 @@ function AppToolbar(props) {
               title="Bookmarks"
               url="chrome://bookmarks/"
             />
-            {/* <ToolbarIconButton
-              icon="tab"
-              title="Tabs"
-              url="chrome://history/syncedTabs"
-            /> */}
             <ToolbarIconButton
               icon="history"
               title="History"

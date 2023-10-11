@@ -1,14 +1,13 @@
-/*global chrome*/
-
-import React, { useEffect, useState } from 'react';
-// import PropTypes from 'prop-types';
+import { FormEventHandler, UIEventHandler, useEffect, useState } from 'react';
 import AppToolbar from './AppToolbar';
 import BookmarksView from './BookmarksView';
 
-function useBookmarksFolder(folderName) {
-  const [bookmarks, setBookmarks] = useState([]);
+function useBookmarksFolder(folderName: string) {
+  const [bookmarks, setBookmarks] = useState<
+    chrome.bookmarks.BookmarkTreeNode[]
+  >([]);
 
-  const updateBookmarks = folder => {
+  const updateBookmarks = (folder: chrome.bookmarks.BookmarkTreeNode) => {
     setBookmarks(folder.children || []);
   };
 
@@ -17,20 +16,20 @@ function useBookmarksFolder(folderName) {
       // Search bookmarks for folder
       chrome.bookmarks.search(
         {
-          url: null,
+          url: undefined,
           title: folderName,
         },
         results => {
           // If results, parse bookmarks
           results.length &&
             chrome.bookmarks.getSubTree(results[0].id, data =>
-              updateBookmarks(data[0])
+              updateBookmarks(data[0]),
             );
 
           // Fallback to Bookmarks Bar
           !results.length &&
             chrome.bookmarks.getSubTree('1', data => updateBookmarks(data[0]));
-        }
+        },
       );
     }
 
@@ -65,20 +64,24 @@ function useBookmarksFolder(folderName) {
   return bookmarks;
 }
 
-function MainView({ folderName = '_Swift' }) {
+function MainView({ folderName = '_Swift' }: { folderName?: string }) {
   const bookmarks = useBookmarksFolder(folderName);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearchChange = event =>
-    setSearchQuery(event.target.value.toLowerCase());
+  const handleSearchChange: FormEventHandler<HTMLInputElement> = event =>
+    setSearchQuery((event.target as HTMLInputElement).value.toLowerCase());
 
-  const handleScrollChange = event => {
-    const isScrolledCurrent = event.target.scrollTop > 0 ? true : false;
+  const handleScrollChange: UIEventHandler<HTMLDivElement> = event => {
+    const isScrolledCurrent =
+      (event.target as HTMLDivElement).scrollTop > 0 ? true : false;
     isScrolledCurrent !== isScrolled && setIsScrolled(isScrolledCurrent);
   };
 
-  const filterBookmarks = (bookmarks, filter) => {
+  const filterBookmarks = (
+    bookmarks: chrome.bookmarks.BookmarkTreeNode[],
+    filter: string,
+  ) => {
     // Clone bookmarks
     bookmarks = JSON.parse(JSON.stringify(bookmarks));
 
@@ -89,7 +92,7 @@ function MainView({ folderName = '_Swift' }) {
           (folder.children = folder.children.filter(bookmark =>
             filter
               ? bookmark.url && bookmark.title.toLowerCase().includes(filter)
-              : bookmark.url
+              : bookmark.url,
           ));
         return folder;
       })
@@ -101,9 +104,9 @@ function MainView({ folderName = '_Swift' }) {
   const bookmarksFiltered = filterBookmarks(bookmarks, searchQuery);
 
   const msg = searchQuery ? (
-    <div class="no-bookmarks">No search results found</div>
+    <div className="no-bookmarks">No search results found</div>
   ) : (
-    <div class="no-bookmarks fadein">
+    <div className="no-bookmarks fadein">
       Bookmarks in <strong>Bookmarks Bar</strong> or{' '}
       <strong>{folderName}</strong> appear here
     </div>
